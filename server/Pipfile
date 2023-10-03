@@ -13,6 +13,9 @@ marshmallow-sqlalchemy = "*"
 flask-restful = "*"
 flask-cors = "*"
 gunicorn = "*"
+flask-login = "*"
+flask-wtf = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 
