@@ -1,0 +1,23 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    box-sizing: border-box;
+    font-family: 'Gabarito', cursive;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.container{
+    padding: 0 5%;
+}
+
+.header{
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.section-title{
+    font-size: 2.8em;
+    text-transform: capitalize;
+    font-family: 'Gabarito', cursive;
+}
