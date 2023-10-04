@@ -1,7 +1,7 @@
 import {Route, Routes} from 'react-router-dom'
 import './App.css';
 import Landing from './components/Landing'
-import LogIn_SignUp from './components/LogIn'
+import LogIn_SignUp from './components/LogIn_SignUP'
 import Home from './components/Home'
 import Properties from './components/Properties'
 import Houses from './components/Houses'
