@@ -1,4 +1,9 @@
 import React from 'react'
+import '../App.css'
+import user_icon from '../Images/user_icon.png'
+import email_icon from '../Images/email_icon.png'
+import password_icon from '../Images/password_icon.png'
+import add_user_icon from '../Images/add_user_icon.png' 
 
 function LogIn_SignUp() {
   return (
@@ -9,14 +14,25 @@ function LogIn_SignUp() {
             </div>
             <div className="inputs">
                 <div className="input">
-                    <input type="text"/>
+                  <img src={user_icon}alt="" className='icon'/>
+                    <input type="text"placeholder='Name'/>
                 </div>
                 <div className="input">
-                    <input type="email"/>
+                  <img src={email_icon} alt=""className='icon'/>
+                    <input type="email"placeholder='Email address'/>
                  </div>
                  <div className="input">
-                    <input type="password"/>
+                 <img src={password_icon} alt=""className='icon'/>
+                    <input type="password"placeholder='Password'/>
                  </div>
+                 <div className='forgot-password'>Lost Password?<span> Click Here!</span></div>
+                 <div className='submit-container'> 
+                  <div className='submit'>Sign Up</div>
+                  <div className='submit'>Log in</div>
+                  
+
+                 </div>
+
             </div>
 
         </div>
