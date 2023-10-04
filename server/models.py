@@ -1,7 +1,7 @@
-from app import db
+
 from datetime import datetime
-
-
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 class Owner(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(25))
@@ -57,5 +57,5 @@ class House(db.Model):
     issues = db.relationship('HouseIssue', backref='house', lazy=True)
 
     # Define the many-to-many relationship with Issues through HouseIssue
-    issues_many_to_many = db.relationship('Issues',secondary='house_issue', backref=db.backref('houses',lazy='dynamic'))
+    issues_many_to_many = db.relationship('Issues',secondary='house_issue', backref=db.backref('houses',lazy='dynamic'),overlaps="house,issues")
 
