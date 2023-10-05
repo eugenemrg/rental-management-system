@@ -1,7 +1,8 @@
 import {Route, Routes} from 'react-router-dom'
 import './App.css';
 import Landing from './components/Landing'
-import LogIn_SignUp from './components/LogIn_SignUP'
+import Login from './components/Login'; 
+import SignUp from './components/SignUp';
 import Home from './components/Home'
 import Properties from './components/Properties'
 import Houses from './components/Houses'
@@ -13,7 +14,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path='/' element={ <Landing/> } />
-        <Route path='login' element={ <LogIn_SignUp/> } />
+        <Route path='login' element={<Login />} />
+        <Route path='signup' element={<SignUp />} />
         <Route path='dashboard' element={ <Home/> } />
         <Route path='properties' element={ <Properties/> } />
         <Route path='houses' element={ <Houses/> } />
