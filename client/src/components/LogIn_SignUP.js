@@ -3,10 +3,9 @@ import '../App.css';
 import user_icon from '../Images/user_icon.png';
 import email_icon from '../Images/email_icon.png';
 import password_icon from '../Images/password_icon.png';
-import add_user_icon from '../Images/add_user_icon.png';
 
 function LogIn_SignUp() {
-  
+
   const [action, setAction] = useState("Sign Up");
 
   return (
