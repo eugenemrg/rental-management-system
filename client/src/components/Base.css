@@ -139,3 +139,73 @@ tr{
     text-align: center;
     padding: 0px 24px;
 }
+
+.table-button{
+    color: black;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-size: 1.1em;
+    font-family: 'Gabarito', cursive;
+    border: 2px solid crimson;
+    border-radius: 24px;
+    cursor: pointer;
+}
+
+.table-button:hover{
+    background-color: crimson;
+    color: white;
+}
+
+.main-button{
+    display: inline-block;
+    color: black;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-size: 1.1em;
+    font-family: 'Gabarito', cursive;
+    border: 2px solid crimson;
+    border-radius: 24px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.main-button:hover{
+    background-color: crimson;
+    color: white;
+}
+
+.table-icon-button{
+    color: black;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-family: 'Gabarito', cursive;
+    cursor: pointer;
+}
+
+.table-icon-button:hover{
+    color: crimson;
+}
+
+td{
+    vertical-align: middle;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6{
+    font-family: 'Gabarito', cursive;
+}
+
+.form-label{
+    color: black;
+    font-family: 'Gabarito', cursive;
+}
+
+.form-control, .form-select{
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.form-control:focus, .form-select:focus{
+    box-shadow: none;
+    border: 1px solid crimson;
+}

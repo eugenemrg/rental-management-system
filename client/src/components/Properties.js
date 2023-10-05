@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './Base.css'
 import Table from 'react-bootstrap/Table';
 import Navigation from './Navigation'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import EditProperty from './EditProperty';
+import NewProperty from './NewProperty';
 
 function Properties() {
   let [tenants, setTenants] = useState([])
@@ -21,7 +22,7 @@ function Properties() {
       <Navigation />
       <div className='container'>
         <p className='section-title'>properties</p>
-        <p className='header'>RENTAL|TRACKER</p>
+        <NewProperty />
         <div className='settings'>
           <Table responsive striped hover>
             <thead>
@@ -31,7 +32,8 @@ function Properties() {
                 <th className='py-3'>Phone</th>
                 <th className='py-3'>Email</th>
                 <th className='py-3'>Due Date</th>
-                <th className='py-3'>Property Id</th>
+                <th className='py-3'>Property</th>
+                <th className='py-3'></th>
               </tr>
             </thead>
             <tbody>
@@ -44,6 +46,9 @@ function Properties() {
                     <td className='py-3'>{tenant.email}</td>
                     <td className='py-3'>{tenant.due_date}</td>
                     <td className='py-3'>{tenant.property_id}</td>
+                    <td>
+                      <EditProperty />
+                    </td>
                   </tr>
                 )
               })}

@@ -1,5 +1,6 @@
 import {Route, Routes} from 'react-router-dom'
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Landing from './components/Landing'
 import SignUp from './components/SignUp'
 import LogIn from './components/LogIn'
