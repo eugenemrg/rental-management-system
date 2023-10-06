@@ -76,4 +76,4 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Acknowledgements
-The Rental Management System is created for learning purposes mainly using React and Flask alongside many other open source tools 
+The Rental Management System is created for learning purposes mainly using React and Flask alongside many other open source tools.
