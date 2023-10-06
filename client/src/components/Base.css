@@ -73,6 +73,8 @@ tr{
     border: 2px solid crimson;
     border-radius: 24px;
     cursor: pointer;
+    text-decoration: none;
+    margin-left: 24px;
 }
 
 .logout-button:hover{

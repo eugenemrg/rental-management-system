@@ -1,195 +1,215 @@
-*{
-    box-sizing:border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    background-position: center; 
-    background-image:url('Images/landing_img.jpg');
-    object-fit: cover;
-    background-size: contain;
-    width: 100%;
-  }
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.landing-App {
+  background-image: url('./background.png');
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.landing-App .navigation {
+  background-color: white;
+}
 
 .icon {
-    width: 32px; 
-    height: 32px; 
-    margin-right: 10px; 
-    vertical-align: middle; 
-    margin:0px 30px;
-  }
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  vertical-align: middle;
+  margin: 0px 30px;
+}
 
 .login {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    margin-top: 200px;
-    background: #fff;
-    padding-bottom: 30px;
-    width: 600px;
-     
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 20px;
+  background: #fff;
+  padding-bottom: 30px;
+  width: 600px;
+
 }
 
 .header {
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 9p1x;
-    width:100%;
-    margin-top: 30px;
-}
-.text{
-    color:rgb(4, 95, 128);
-    font-size: 48px;
-    font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 30px;
 }
 
-.underline{
-    width: 61px;
-    height:6px;
-    background: rgb(4, 95, 128);
-    border-radius: 9px;
-
+.text {
+  color: crimson;
+  font-size: 48px;
+  font-weight: 700;
 }
 
-.inputs{
-    margin-top: 55px;
-    display:flex;
-    flex-direction: column;
-    gap: 25px;
-}
-.input{
-    display: flex;
-    align-items: center;
-    margin:auto;
-    width:480px;
-    height:80px;
-    background: #eaeaea;
-    border-radius: 6px;
- }
-
-.input input{
-    height: 50px;
-    width: 400px;
-    background: transparent;
-    border:none;
-    outline:none;
-    color: #797979;
-    font-size:19px; 
-}
-
-.forgot-password{
-    padding-left: 62px;
-    margin-top: 27px;
-    color: #797979;
-    font-size: 18px;
+.underline {
+  width: 61px;
+  height: 6px;
+  background: rgb(4, 95, 128);
+  border-radius: 9px;
 
 }
 
-.forgot-password span{
-    color:rgb(4, 95, 128);
-    cursor: pointer;
+.inputs {
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.submit-container{
-    display: flex;
-    gap: 30px;
-    margin: 60px auto;
-    
-}
-.submit{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 220px;
-    height: 59px;
-    color: #fff;
-    background: rgb(4, 95, 128);
-    border-radius:50px ;
-    font-size: 19px;
-    font-weight: 700;
-    cursor: pointer;
+.input {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 480px;
+  height: 80px;
+  background: #eaeaea;
+  border-radius: 6px;
 }
 
-.gray{
-    background: #EAEAEA;
-    color: #676767;
+.input input {
+  height: 50px;
+  width: 400px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #797979;
+  font-size: 19px;
+}
+
+.forgot-password {
+  padding-left: 62px;
+  margin-top: 27px;
+  color: #797979;
+  font-size: 18px;
+
+}
+
+.forgot-password span {
+  color: rgb(4, 95, 128);
+  cursor: pointer;
+}
+
+.submit-container {
+  display: flex;
+  gap: 30px;
+  margin: 60px auto;
+
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 220px;
+  height: 59px;
+  color: #fff;
+  background: crimson;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit:hover{
+  background: rgb(232, 51, 87);
+}
+
+.gray {
+  background: #EAEAEA;
+  color: #676767;
 }
 
 
 .landing-about {
-    padding: 10px;
-    max-width: 650px;
-    font-size: 200%;
-    font-weight: 200;
-    margin: 60px;
-    color: #083233;
-    font-weight: 500;
-  }
+  padding: 10px;
+  max-width: 50%;
+  margin: 80px 120px;
+  color: #083233;
+}
 
 .landing-header {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    color:rgb(3, 74, 100) ;
-    text-align: center;
-    top: 0;
-    padding: 30px 100px;
-    font-size: 30px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    position: relative;
-  }
-  
-  .landing-login-button-container {
-    flex: 1;
-    text-align: right;
-  }
-  
-  .landing-login-button {
-    background-color: #fff; 
-    color:rgb(4, 95, 128);
-    border: none;
-    padding: 2px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin:5%;
-    font-weight: 700;
-    letter-spacing: 1px;
-    border-radius: 20px;
-  }
-  
-  .landing-login-button:hover {
-    background-color:rgb(4, 95, 128); 
-    color: #fff; 
-    cursor: pointer;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(3, 74, 100);
+  text-align: center;
+  top: 0;
+  padding: 30px 100px;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  position: relative;
+}
 
-  .landing-main {
-    display: flex;
-    min-height: 100vh;
+.landing-login-button-container {
+  flex: 1;
+  text-align: right;
+}
 
-  }
+.landing-login-button {
+  background-color: #fff;
+  color: rgb(4, 95, 128);
+  border: none;
+  padding: 2px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 5%;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 20px;
+}
 
-  .landing-footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;
-    background-color:black; 
-    color: #fff; 
-    padding: 40px;
-    text-align: center;
-  }
-  
+.landing-login-button:hover {
+  background-color: rgb(4, 95, 128);
+  color: #fff;
+  cursor: pointer;
+}
 
+.landing-main {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Open Sans', sans-serif;
+}
 
+.landing-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: #fff;
+  padding: 40px;
+  text-align: center;
+}
 
+.landing-about h2 {
+  font-size: 4.2em;
+  font-weight: bold;
+}
 
+.landing-about p {
+  font-size: 1.5em;
+}
 
+footer p{
+  font-family: 'Open Sans', sans-serif;
+}
 
-
+/* input[type="text"], input[type="password"], input[type="email"]{
+  padding-left: 12px;
+} */
