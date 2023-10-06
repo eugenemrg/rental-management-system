@@ -9,7 +9,7 @@ function Login() {
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
 
-  userInfo = {
+  let userInfo = {
     email: email,
     password: password
   }
