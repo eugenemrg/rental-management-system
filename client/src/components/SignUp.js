@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../App.css';
+import LandingNavigation from './LandingNavigation'
 import user_icon from '../Images/user_icon.png';
 import email_icon from '../Images/email_icon.png';
 import password_icon from '../Images/password_icon.png';
@@ -18,6 +19,8 @@ function SignUp() {
   }
 
   return (
+    <>
+    <LandingNavigation />
     <form onSubmit={handleSubmit}>
       <div className='login'>
         <div className='header'>
@@ -48,6 +51,7 @@ function SignUp() {
         </div>
       </div>
     </form>
+    </>
   );
 }
 

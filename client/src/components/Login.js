@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../App.css';
+import LandingNavigation from './LandingNavigation'
 import email_icon from '../Images/email_icon.png';
 import password_icon from '../Images/password_icon.png';
 import { useSignIn } from 'react-auth-kit'
@@ -49,6 +50,8 @@ function Login() {
   }
 
   return (
+    <>
+    <LandingNavigation />
     <form onSubmit={handleSubmit}>
       <div className='login'>
         <div className='header'>
@@ -72,6 +75,7 @@ function Login() {
         </div>
       </div>
     </form>
+    </>
   );
 }
 
