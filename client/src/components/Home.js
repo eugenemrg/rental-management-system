@@ -12,7 +12,7 @@ function Home() {
             <Navigation />
             <div className='sections-container'>
                 <p className='section-title'>dashboard</p>
-                <p className='header'>RENTAL | TRACKER</p>
+                <p className='section-header'>RENTAL | TRACKER</p>
                 <div className='section-links'>
                     <Link className='section-link-card' to='/properties'>
                         <div><img src={properties}></img></div>
