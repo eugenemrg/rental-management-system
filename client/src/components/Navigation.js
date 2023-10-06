@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
 import './Base.css'
+import { useSignOut } from 'react-auth-kit'
 
 function Nav() {
+  const signOut = useSignOut()
+  const [clicks, setClicks] = useState(0)
+
+  useEffect(() => {
+    if(clicks > 0){
+      signOut()
+    }
+  }, [clicks])
+
   return (
     <div className='navigation'>
         <div className='links'>
@@ -13,7 +23,7 @@ function Nav() {
             <Link to='/tenants'>Tenants</Link>
         </div>
         <div className='buttons'>
-            <span className='logout-button'>Log Out</span>
+            <span className='logout-button' onClick={e => setClicks(c => c+1)}>Log Out</span>
         </div>
     </div>
   )
