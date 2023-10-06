@@ -1,61 +1,56 @@
-from app import db
-from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
+db = SQLAlchemy()
 
 class Owner(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(25))
-    last_name = db.Column(db.String(25))
-    phone_no = db.Column(db.Integer)
-    email = db.Column(db.String(225))
-    created_at = db.Column(db.DateTime, default=datetime.now())
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     properties = db.relationship('Property', backref='owner', lazy=True)
 
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 class Property(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String, nullable=False)
-    rooms = db.Column(db.String)
+    location = db.Column(db.String(200), nullable=False)
+    owner_name = db.Column(db.String(200), nullable=True)  
+    property_name = db.Column(db.String(200), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('owner.id'), nullable=False)
-    occupied = db.Column(db.String, nullable=False)
     houses = db.relationship('House', backref='property', lazy=True)
+    
 
-
-class Tenants(db.Model):
+class House(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    phone_no = db.Column(db.Integer)
-    email = db.Column(db.String(225), nullable=False)
-    due_date = db.Column(db.DateTime)
-    payment = db.Column(db.Integer)
-    property_id = db.Column(db.Integer, db.ForeignKey('property.id'))
+    description = db.Column(db.String(200), nullable=False)
+    rent = db.Column(db.Float, nullable=False)
+    balance = db.Column(db.Float, default=0.0) 
+    tenant_name = db.Column(db.String(200), nullable=True)  
+    property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
+    property_name = db.Column(db.String(200), nullable=True)  
+    tenant_id = db.Column(db.Integer, db.ForeignKey('tenant.id'), nullable=True)
+    issues = db.relationship('HouseIssue', backref='house', lazy=True)
 
-
-class Issues(db.Model):
+class Tenant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    description = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    houses = db.relationship('House', backref='tenant', lazy=True)
 
+class Issue(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(500), nullable=False)
+    house_issues = db.relationship('HouseIssue', backref='issue', lazy=True)
 
 class HouseIssue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
-    issues_id = db.Column(db.Integer, db.ForeignKey('issues.id'), nullable=False)
-    complaint = db.Column(db.String(225))
-
-# Define the House model with one-to-many relationship and many-to-many relationship
-
-
-class House(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    unit_id = db.Column(db.Integer)
-    rent = db.Column(db.Integer)
-    rooms = db.Column(db.String)
-    property_id = db.Column(db.Integer, db.ForeignKey('property.id'))
-
-    # Define the one-to-many relationship with HouseIssue
-    issues = db.relationship('HouseIssue', backref='house', lazy=True)
-
-    # Define the many-to-many relationship with Issues through HouseIssue
-    issues_many_to_many = db.relationship('Issues',secondary='house_issue', backref=db.backref('houses',lazy='dynamic'))
-
+    house_name = db.Column(db.String(200), nullable=True)
+    issue_id = db.Column(db.Integer, db.ForeignKey('issue.id'), nullable=False)
+    issue_name = db.Column(db.String(200), nullable=True)
+    status = db.Column(db.String(50), nullable=False) 
