@@ -3,11 +3,13 @@ import '../App.css';
 import email_icon from '../Images/email_icon.png';
 import password_icon from '../Images/password_icon.png';
 import { useSignIn } from 'react-auth-kit'
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const signIn = useSignIn()
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
+  const navigate = useNavigate();
 
   let userInfo = {
     email: email,
@@ -38,6 +40,7 @@ function Login() {
             tokenType: "Bearer",
             authState: { email: email }
           })
+          navigate("/dashboard");
         } else {
           // handle redirect or error message
         }
