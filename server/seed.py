@@ -173,6 +173,7 @@ with app.app_context():
     db.session.commit()
     
 # sample email, password with current commit
+
 # Owner: robertsroger@example.com, password: i(t2H)tr
 # Owner: pmosley@example.com, password: 9%1*T6As
 # Owner: brandonwallace@example.net, password: ^35viTmLjU
