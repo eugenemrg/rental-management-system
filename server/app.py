@@ -7,6 +7,7 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt, JWTManager
 from flask_bcrypt import Bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rental_management.db'
@@ -18,6 +19,7 @@ migrate = Migrate(app, db)
 ma = Marshmallow(app)
 api = Api(app)
 bcrypt = Bcrypt(app)
+CORS(app)
 
 class Owner(db.Model):
     id = db.Column(db.Integer, primary_key=True)
