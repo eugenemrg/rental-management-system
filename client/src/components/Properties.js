@@ -4,16 +4,25 @@ import Table from 'react-bootstrap/Table';
 import Navigation from './Navigation'
 import EditProperty from './EditProperty';
 import NewProperty from './NewProperty';
+import {useAuthHeader} from 'react-auth-kit'
 
 function Properties() {
-  let [tenants, setTenants] = useState([])
+  const authHeader = useAuthHeader()
+  let [properties, setProperties] = useState([])
+
+  let options = {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `${authHeader()}`
+    }
+  }
 
   useEffect(() => {
-    fetch('http://127.0.0.1:3015/tenants')
+    fetch('http://127.0.0.1:5559/properties', options)
       .then(res => res.json())
       .then((data) => {
         console.log(data)
-        setTenants(data)
+        setProperties(data.properties)
       })
   }, [])
 
@@ -29,23 +38,19 @@ function Properties() {
               <tr>
                 <th className='py-3'>#</th>
                 <th className='py-3'>Name</th>
-                <th className='py-3'>Phone</th>
-                <th className='py-3'>Email</th>
-                <th className='py-3'>Due Date</th>
-                <th className='py-3'>Property</th>
+                <th className='py-3'>Location</th>
+                <th className='py-3'>Houses</th>
                 <th className='py-3'></th>
               </tr>
             </thead>
             <tbody>
-              {tenants.map((tenant) => {
+              {properties.map((property, index) => {
                 return (
-                  <tr key={tenant.id}>
-                    <td className='py-3'>{tenant.id}</td>
-                    <td className='py-3'>{tenant.name}</td>
-                    <td className='py-3'>{tenant.phone}</td>
-                    <td className='py-3'>{tenant.email}</td>
-                    <td className='py-3'>{tenant.due_date}</td>
-                    <td className='py-3'>{tenant.property_id}</td>
+                  <tr key={property.id}>
+                    <td className='py-3'>{index+1}</td>
+                    <td className='py-3'>{property.name}</td>
+                    <td className='py-3'>{property.location}</td>
+                    <td className='py-3'>{property.houses.length}</td>
                     <td>
                       <EditProperty />
                     </td>
