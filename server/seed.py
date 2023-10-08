@@ -173,16 +173,16 @@ with app.app_context():
     db.session.commit()
     
 # sample email, password with current commit
-# Owner: milessheila@example.net, password: vS6L_7Fk
-# Owner: crystal11@example.net, password: @d3FTetj
-# Owner: richardmoreno@example.org, password: b%fr1SjU
-# Owner: leejensen@example.com, password: %h^4UdVV
-# Owner: amanda73@example.org, password: Z%w%1RCk
-# Owner: rodneycampbell@example.com, password: 1Sr_F7If
-# Owner: cflynn@example.org, password: VR)94OGw
-# Owner: zwhite@example.com, password: K&5yI+ik
-# Owner: ashley86@example.net, password: g^10Dj+p
-# Owner: youngdiane@example.net, password: _e36Xwfx
+# Owner: robertsroger@example.com, password: i(t2H)tr
+# Owner: pmosley@example.com, password: 9%1*T6As
+# Owner: brandonwallace@example.net, password: ^35viTmLjU
+# Owner: norrisrobin@example.net, password: bmm+4BtK
+# Owner: mandycollins@example.com, password: 1$Y3U4gO
+# Owner: emily37@example.com, password: tFk!O1Al7If
+# Owner: heather21@example.com, password: *VI8R+ps
+# Owner: margaret18@example.org, password: YL+7Kolf
+# Owner: nathaniel99@example.net, password: _6L7StwM
+# Owner: ashleyhunt@example.net, password: @7aaJ&Kl
 
 # ------------END OF NEW SEED-------------
 # from models import db, Owner, Property, House, Tenant, Issue, HouseIssue
