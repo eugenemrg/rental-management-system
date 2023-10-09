@@ -209,7 +209,7 @@ class PropertyResource(Resource):
         db.session.commit()
         
         return make_response(
-            jsonify(HouseSchema().dump(property)),
+            jsonify(PropertySchema().dump(Property.query.filter_by(id = property.id).first())),
             200
         )
         
