@@ -20,7 +20,7 @@ function Tenants() {
   }
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5559/tenants', options)
+    fetch('https://rmt-5zqu.onrender.com/tenants', options)
       .then(res => {
         if(!res.ok){
           navigate('/login')

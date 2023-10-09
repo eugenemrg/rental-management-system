@@ -20,7 +20,7 @@ function Reports() {
   }
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5559/issues', options)
+    fetch('https://rmt-5zqu.onrender.com/issues', options)
       .then(res => {
         if(!res.ok){
           navigate('/login')

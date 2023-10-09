@@ -35,7 +35,7 @@ function NewProperty({ addProperty }) {
       body: JSON.stringify(new_property)
     }
 
-    fetch('http://127.0.0.1:5559/properties', options)
+    fetch('https://rmt-5zqu.onrender.com/properties', options)
       .then(res => {
         if (!res.ok) {
           navigate('/login')
