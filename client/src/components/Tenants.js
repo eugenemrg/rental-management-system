@@ -38,7 +38,7 @@ function Tenants() {
       <Navigation />
       <div className='container'>
         <p className='section-title'>tenants</p>
-        <NewProperty />
+        {/* <NewProperty /> */}
         <div className='settings'>
           <Table responsive striped hover>
             <thead>
@@ -59,7 +59,7 @@ function Tenants() {
                     <td className='py-3'>{tenant.last_name}</td>
                     <td className='py-3'>{tenant.email}</td>
                     <td>
-                      <EditProperty />
+                      {/* <EditProperty /> */}
                     </td>
                   </tr>
                 )

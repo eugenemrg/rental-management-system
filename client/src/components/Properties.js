@@ -33,12 +33,27 @@ function Properties() {
       })
   }, [])
 
+  function addNewProperty(property) {
+    setProperties(current => [...current, property])
+  }
+
+  function updateProperty(property) {
+    console.log('Updated property received');
+    console.log(property);
+    console.log(JSON.stringify(property));
+
+    let updatedProperties = properties.map(p => {
+      return p.id == property.id ? property : p
+    })
+    setProperties(current => updatedProperties)
+  }
+
   return (
     <>
       <Navigation />
       <div className='container'>
         <p className='section-title'>properties</p>
-        <NewProperty />
+        <NewProperty addProperty={addNewProperty}/>
         <div className='settings'>
           <Table responsive striped hover>
             <thead>
@@ -52,14 +67,15 @@ function Properties() {
             </thead>
             <tbody>
               {properties.map((property, index) => {
+                console.log(property);
                 return (
                   <tr key={property.id}>
                     <td className='py-3'>{index+1}</td>
                     <td className='py-3'>{property.name}</td>
                     <td className='py-3'>{property.location}</td>
-                    <td className='py-3'>{property.houses.length}</td>
+                    <td className='py-3'>{property.houses?.length !== undefined ? property.houses.length : 0}</td>
                     <td>
-                      <EditProperty />
+                      <EditProperty property={property} updateProperty={updateProperty} />
                     </td>
                   </tr>
                 )

@@ -3,7 +3,7 @@ import './Base.css'
 import Table from 'react-bootstrap/Table';
 import Navigation from './Navigation'
 import EditProperty from './EditProperty';
-import NewProperty from './NewProperty';
+import NewHouse from './NewHouse';
 import {useAuthHeader} from 'react-auth-kit'
 import { useNavigate } from "react-router-dom";
 
@@ -33,12 +33,16 @@ function Houses() {
       })
   }, [])
 
+  function addNewHouse(house) {
+    setHouses(current => [...current, house])
+  }
+
   return (
     <>
       <Navigation />
       <div className='container'>
         <p className='section-title'>houses</p>
-        <NewProperty />
+        <NewHouse addHouse = {addNewHouse}/>
         <div className='settings'>
           <Table responsive striped hover>
             <thead>
@@ -63,7 +67,7 @@ function Houses() {
                     <td className='py-3'>{house.tenant != null ? 'Occupied' : 'Unoccupied'}</td>
                     <td className='py-3'>{house.tenant != null ? `${house.tenant.first_name} ${house.tenant.last_name} (${house.tenant.email})` : 'Unoccupied'}</td>
                     <td>
-                      <EditProperty />
+                      {/* <EditProperty /> */}
                     </td>
                   </tr>
                 )

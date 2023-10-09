@@ -38,7 +38,7 @@ function Reports() {
       <Navigation />
       <div className='container'>
         <p className='section-title'>issues</p>
-        <NewProperty />
+        {/* <NewProperty /> */}
         <div className='settings'>
           <Table responsive striped hover>
             <thead>
@@ -63,7 +63,7 @@ function Reports() {
                     <td className='py-3'>{issue.detail}</td>
                     <td className='py-3'>{(issue.status === 'not fixed' ? 'Resolved' : 'Unresolved')}</td>
                     <td>
-                      <EditProperty />
+                      {/* <EditProperty /> */}
                     </td>
                   </tr>
                 )
