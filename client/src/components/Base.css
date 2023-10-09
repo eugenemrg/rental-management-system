@@ -1,0 +1,213 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    box-sizing: border-box;
+    font-family: 'Alfa Slab One', cursive;
+    font-family: 'Gabarito', cursive;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.container, .sections-container{
+    padding: 0 5%;
+}
+
+.section-header{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.section-title{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    font-size: 2.8em;
+    text-transform: capitalize;
+    font-family: 'Gabarito', cursive;
+}
+
+.settings{
+    padding-top: 2em;
+}
+
+th{
+    font-family: 'Gabarito', cursive;
+}
+
+tr{
+    cursor: pointer;
+}
+
+/* NAVIGATION */
+
+.navigation{
+    padding: 28px 64px;
+    margin-bottom: 24px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation .links a{
+    text-decoration: none;
+    color: black;
+    padding: 0px 12px;
+    font-size: 1em;
+    font-size: 1.1em;
+    font-family: 'Gabarito', cursive;
+}
+
+.navigation .links a:hover{
+    color: grey;
+}
+
+.logout-button{
+    color: black;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-size: 1.1em;
+    font-family: 'Gabarito', cursive;
+    border: 2px solid crimson;
+    border-radius: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: 24px;
+}
+
+.logout-button:hover{
+    background-color: crimson;
+    color: white;
+}
+
+.links a.home-link{
+    font-family: 'Alfa Slab One', cursive;
+    color: crimson;
+    font-size: 1.2em;
+}
+
+.links a.home-link:hover{
+    color: rgb(227, 66, 98);
+}
+
+/* SECTIONS CONTAINER */
+.sections-container .section-links{
+    margin-top: 32px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: 40px;
+}
+
+.section-link-card{
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    border: 1px solid lightgray;
+    border-radius: 16px;
+    padding: 48px 16px;
+
+    text-decoration: none;
+    color: black;
+}
+
+.section-link-card:hover{
+    border: 1px solid crimson;
+}
+
+.section-link-card div{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.section-link-card div img{
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.section-link-card p:nth-child(2){
+    text-align: center;
+    padding-top: 24px;
+    font-size: 1.8em;
+    font-family: 'Gabarito', cursive;
+}
+.section-link-card p:nth-child(3){
+    text-align: center;
+    padding: 0px 24px;
+}
+
+.table-button{
+    color: black;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-size: 1.1em;
+    font-family: 'Gabarito', cursive;
+    border: 2px solid crimson;
+    border-radius: 24px;
+    cursor: pointer;
+}
+
+.table-button:hover{
+    background-color: crimson;
+    color: white;
+}
+
+.main-button{
+    display: inline-block;
+    color: black;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-size: 1.1em;
+    font-family: 'Gabarito', cursive;
+    border: 2px solid crimson;
+    border-radius: 24px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.main-button:hover{
+    background-color: crimson;
+    color: white;
+}
+
+.table-icon-button{
+    color: black;
+    padding: 8px 24px;
+    font-size: 1em;
+    font-family: 'Gabarito', cursive;
+    cursor: pointer;
+}
+
+.table-icon-button:hover{
+    color: crimson;
+}
+
+td{
+    vertical-align: middle;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6{
+    font-family: 'Gabarito', cursive;
+}
+
+.form-label{
+    color: black;
+    font-family: 'Gabarito', cursive;
+}
+
+.form-control, .form-select{
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.form-control:focus, .form-select:focus{
+    box-shadow: none;
+    border: 1px solid crimson;
+}
