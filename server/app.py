@@ -7,6 +7,7 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt, JWTManager
 from flask_bcrypt import Bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rental_management.db'
@@ -18,6 +19,7 @@ migrate = Migrate(app, db)
 ma = Marshmallow(app)
 api = Api(app)
 bcrypt = Bcrypt(app)
+CORS(app)
 
 class Owner(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -207,7 +209,7 @@ class PropertyResource(Resource):
         db.session.commit()
         
         return make_response(
-            jsonify(HouseSchema().dump(property)),
+            jsonify(PropertySchema().dump(Property.query.filter_by(id = property.id).first())),
             200
         )
         
@@ -242,8 +244,10 @@ api.add_resource(PropertyIdResource, '/properties/<int:id>')
 class HousesResource(Resource):
     @jwt_required()
     def get(self):
+        claims = get_jwt()
+        owner_id = claims['id']
         return make_response(
-            jsonify([HouseSchema().dump(house) for house in House.query.all()]),
+            jsonify([HouseSchema().dump(house) for house in House.query.all() if house.property.owner.id == owner_id]),
             200
         )
 api.add_resource(HousesResource, '/houses')
@@ -447,4 +451,4 @@ class HouseIssueIdResource(Resource):
 api.add_resource(HouseIssueIdResource, '/issues/<int:id>')
 
 if __name__ == '__main__':
-    app.run(port=5558, debug=True)
+    app.run(port=5559, debug=True)
