@@ -22,9 +22,19 @@ To run the Rental Management App locally:
 - The app should run on any modern web browser with JavaScript enabled
 - To start the flask app `cd` into `server`, run `pipenv install` then `flask run` or `python app.py` to test the API
 
+### Deployment links
+
+Website Link: https://rental-management-system-ten.vercel.app/
+Api Link: https://rmt-5zqu.onrender.com/
+
 ### API endpoints
 
 API documentation to be added after update
+
+#### Trial Credentials
+
+User email: pmosley@example.com    
+Password:   9%1*T6As
 
 # Dependencies
 The project has the following dependencies:
@@ -51,6 +61,7 @@ This is a group project created by:
 - Victor Oroo
 - Genevive Opondo
 - Brian Odhiambo
+
 
 # License
 Rental Management System. An automated systems for owners of rental properties to manage their properties
