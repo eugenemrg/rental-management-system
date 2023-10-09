@@ -154,7 +154,6 @@ class OwnerResource(Resource):
             200
         )
     
-    @jwt_required()
     def post(self):
         owner = Owner(
             first_name = request.json.get("fname"),
