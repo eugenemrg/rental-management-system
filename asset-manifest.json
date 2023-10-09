@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/rental-management-system/client/static/css/main.4ff61060.css",
+    "main.js": "/rental-management-system/client/static/js/main.3b720b32.js",
+    "static/media/background.png": "/rental-management-system/client/static/media/background.43ee71360aedc33603d4.png",
+    "static/media/tenants.svg": "/rental-management-system/client/static/media/tenants.366ca32d874e57b8ea38b444b7a39727.svg",
+    "static/media/password_icon.png": "/rental-management-system/client/static/media/password_icon.773123e22ba751366547.png",
+    "static/media/issues.svg": "/rental-management-system/client/static/media/issues.f7ae80b2ae08a902c603bde24dc9181a.svg",
+    "static/media/user_icon.png": "/rental-management-system/client/static/media/user_icon.33e7df0963941edbeb70.png",
+    "static/media/properties.svg": "/rental-management-system/client/static/media/properties.c6c432b1d23f333c39eb53aef61604bb.svg",
+    "static/media/email_icon.png": "/rental-management-system/client/static/media/email_icon.51b08bcbb5af7a861c31.png",
+    "static/media/house.svg": "/rental-management-system/client/static/media/house.fe3e0f24bbf02d32a27d384b64d5fd9a.svg",
+    "index.html": "/rental-management-system/client/index.html",
+    "main.4ff61060.css.map": "/rental-management-system/client/static/css/main.4ff61060.css.map",
+    "main.3b720b32.js.map": "/rental-management-system/client/static/js/main.3b720b32.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4ff61060.css",
+    "static/js/main.3b720b32.js"
+  ]
+}
