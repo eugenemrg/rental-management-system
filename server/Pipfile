@@ -16,6 +16,8 @@ gunicorn = "*"
 flask-login = "*"
 flask-wtf = "*"
 flask-jwt-extended = "*"
+flask-bcrypt = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 

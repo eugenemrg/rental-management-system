@@ -10,7 +10,7 @@ function Login() {
   const signIn = useSignIn()
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   let userInfo = {
     email: email,
@@ -21,7 +21,7 @@ function Login() {
     e.preventDefault()
     e.stopPropagation()
 
-    fetch('http://127.0.0.1:5000/login', {
+    fetch('http://127.0.0.1:5559/login', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -30,6 +30,9 @@ function Login() {
     })
       .then(res => {
         //handle status code check
+        if(!res.ok){
+          navigate('/login')
+        }
         return res.json()
       })
       .then(data => {

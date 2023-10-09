@@ -1,230 +1,454 @@
-from flask import Flask, request, jsonify
-from models import db, Owner, Property, House, Tenant, Issue, HouseIssue
+from flask import Flask, make_response, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_restful import Resource, Api
+from flask_marshmallow import Marshmallow
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, auto_field
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt, JWTManager
+from flask_bcrypt import Bcrypt
+from sqlalchemy.ext.hybrid import hybrid_property
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rental_management.db'
-app.config['SECRET_KEY'] = 'a_secret_key'
+app.config["JWT_SECRET_KEY"] = "test@1234"
+jwt = JWTManager(app)
+
+db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-db.init_app(app)
+ma = Marshmallow(app)
+api = Api(app)
+bcrypt = Bcrypt(app)
+CORS(app)
 
-@app.route('/owners/<int:owner_id>', methods=['GET'])
-def get_owner_by_id(owner_id):
-    owner = Owner.query.get(owner_id)
-    if not owner:
-        return jsonify({"error": "Owner not found"}), 404
-    return jsonify({
-        "id": owner.id,
-        "name": owner.name,
-        "email": owner.email
-    })
+class Owner(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+    email = db.Column(db.String)
+    _password_hash = db.Column(db.String)
+    properties = db.relationship('Property', backref='owner', lazy=True)
+    
+    @hybrid_property
+    def password_hash(self):
+        return self._password_hash
 
-@app.route('/owners', methods=['POST'])
-def create_owner():
-    name = request.json.get('name')
-    email = request.json.get('email')
-    password = request.json.get('password')
-    new_owner = Owner(name=name, email=email)
-    new_owner.set_password(password)
-    db.session.add(new_owner)
-    db.session.commit()
-    return jsonify({"message": "Owner added!", "id": new_owner.id}), 201
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(
+            password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
 
-@app.route('/owners/<int:owner_id>/properties', methods=['GET'])
-def get_properties_by_owner(owner_id):
-    properties = Property.query.filter_by(owner_id=owner_id).all()
-    return jsonify([prop.location for prop in properties])
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self._password_hash, password.encode('utf-8'))
+    
+class Property(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    location = db.Column(db.String)
+    owner_id = db.Column(db.Integer, db.ForeignKey('owner.id'))
+    
+    houses = db.relationship('House', backref='property', lazy=True)
+    
+class House(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    unit = db.Column(db.String)
+    tenant_id = db.Column(db.Integer, db.ForeignKey('tenant.id'))
+    property_id = db.Column(db.Integer, db.ForeignKey('property.id'))
 
-@app.route('/owners/<int:owner_id>/properties', methods=['POST'])
-def add_property_to_owner(owner_id):
-    location = request.json.get('location')
-    new_property = Property(location=location, owner_id=owner_id)
-    property_name = request.json.get('property_name')  # Get the property name from the request
-    db.session.add(new_property)
-    db.session.commit()
-    return jsonify({"message": "Property added!", "id": new_property.id}), 201
+class Tenant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+    email = db.Column(db.String)
+    
+    houses_list = db.relationship('House', backref='tenant', lazy=True)
 
-@app.route('/properties/<int:property_id>/houses', methods=['POST'])
-def add_house_to_property(property_id):
-    description = request.json.get('description')
-    rent = request.json.get('rent')
-    new_house = House(description=description, rent=rent, property_id=property_id)
-    db.session.add(new_house)
-    db.session.commit()
-    return jsonify({"message": "House added!", "id": new_house.id}), 201
+class Issue(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    description = db.Column(db.String)
 
-@app.route('/tenants', methods=['GET'])
-def get_tenants():
-    tenants = Tenant.query.all()
-    return jsonify([tenant.name for tenant in tenants])
+class HouseIssue(db.Model):
+    id = db.Column(db.Integer, primary_key=id)
+    house_id = db.Column(db.Integer, db.ForeignKey('house.id'))
+    issue_id = db.Column(db.Integer, db.ForeignKey('issue.id'))
+    detail = db.Column(db.String)
+    status = db.Column(db.String)
+    
+    house = db.relationship('House', backref=db.backref('house_issue', cascade='all, delete-orphan'))
+    issue = db.relationship('Issue', backref=db.backref('house_issue', cascade='all, delete-orphan'))
 
-@app.route('/tenants', methods=['POST'])
-def add_tenant():
-    name = request.json.get('name')
-    email = request.json.get('email')
-    new_tenant = Tenant(name=name, email=email)
-    db.session.add(new_tenant)
-    db.session.commit()
-    return jsonify({"message": "Tenant added!", "id": new_tenant.id}), 201
+# Adding schema
+class IssueSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Issue
 
-@app.route('/issues', methods=['GET'])
-def list_issues():
-    issues = Issue.query.all()
-    return jsonify([issue.description for issue in issues])
+class TenantSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Tenant
 
-@app.route('/houses/<int:house_id>/issues/<int:issue_id>', methods=['POST'])
-def assign_issue_to_house(house_id, issue_id):
-    status = request.json.get('status', 'pending')
-    house_issue = HouseIssue(house_id=house_id, issue_id=issue_id, status=status)
-    db.session.add(house_issue)
-    db.session.commit()
-    return jsonify({"message": "Issue assigned to house!"}), 200
+class SinglePropertySchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Property
 
+class HouseSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = House
+    
+    tenant = ma.Nested(TenantSchema, many=False)
+    property = ma.Nested(SinglePropertySchema, many=False)
 
-# =================== Properties Routes ===================
+class PropertySchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Property
+    
+    houses = ma.Nested(HouseSchema, many=True)
 
-@app.route('/', methods=['GET'])
-def homepage():
-    return 'RENTAL MANAGEMENT SYSTEM'
+class OwnerSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Owner
+    
+    properties = ma.Nested(PropertySchema, many=True)
+    
+class HouseIssueSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = HouseIssue
+    
+    house = ma.Nested(HouseSchema, many=False)
+    issue = ma.Nested(IssueSchema, many=False)
 
+# Adding routes
 
+class Index(Resource):
+    def get(self):
+        return {'message': 'RMT API'}
 
-@app.route('/properties', methods=['GET'])
-def get_all_properties():
-    properties = Property.query.all()
-    return jsonify([{
-        "id": prop.id,
-        "location": prop.location,
-         "property_name": prop.property_name,  # Include the property name in the response
-        "owner_id": prop.owner_id
-    } for prop in properties])
+api.add_resource(Index, '/')
 
+class LoginResource(Resource):
+    def post(self):
+        email = request.json.get("email", None)
+        password = request.json.get("password", None)
+        
+        owner = Owner.query.filter_by(email=email).first()
+        
+        if not owner or not owner.authenticate(password):
+            return make_response(
+                jsonify({"msg": "Bad username or password"}),
+                401
+            )
+        
+        additional_claims = {"id": owner.id, "email": owner.email}
+        access_token = create_access_token(identity=owner.id, additional_claims=additional_claims)
+        return jsonify(access_token=access_token)
 
+api.add_resource(LoginResource, '/login')
 
+class OwnerResource(Resource):
+    @jwt_required()
+    def get(self):
+        return make_response(
+            jsonify(OwnerSchema().dump(Owner.query.first())),
+            200
+        )
+    
+    @jwt_required()
+    def post(self):
+        owner = Owner(
+            first_name = request.json.get("fname"),
+            last_name = request.json.get("lname"),
+            email = request.json.get("email"),
+            password_hash = request.json.get("password")
+        )
+        db.session.add(owner)
+        db.session.commit()
+        
+        return make_response(
+            jsonify({'msg': 'success'}),
+            201
+        )
+        
+api.add_resource(OwnerResource, '/owners')
 
-@app.route('/properties', methods=['POST'])
-def add_property():
-    location = request.json.get('location')
-    property_name = request.json.get('property_name')  # Get the property name from the request
-    owner_id = request.json.get('owner_id')
-    new_property = Property(location=location, owner_id=owner_id)
-    db.session.add(new_property)
-    db.session.commit()
-    return jsonify({"message": "Property added!", "id": new_property.id}), 201
+class OwnerIdResource(Resource):
+    @jwt_required()
+    def get(self):
+        return make_response(
+            jsonify(OwnerSchema().dump(Owner.query.first())),
+            200
+        )
+api.add_resource(OwnerIdResource, '/owners/<int:id>')
 
-@app.route('/property/<int:property_id>', methods=['PATCH'])
-def update_property(property_id):
-    prop = Property.query.get(property_id)
-    if not prop:
-        return jsonify({"error": "Property not found"}), 404
+class PropertyResource(Resource):
+    @jwt_required()
+    def get(self):
+        claims = get_jwt()
+        owner_id = claims['id']
+        owner = Owner.query.filter_by(id = int(owner_id)).first()
+        
+        return make_response(
+            jsonify({'properties': [PropertySchema().dump(property) for property in owner.properties]}),
+            200
+        )
+    
+    @jwt_required()    
+    def post(self):
+        claims = get_jwt()
+        owner_id = claims['id']
+        owner = Owner.query.filter_by(id = int(owner_id)).first()
+        
+        property = Property(
+            name = request.json.get("name", None),
+            location = request.json.get("location", None),
+            owner = owner
+        )
+        
+        db.session.add(property)
+        db.session.commit()
+        
+        return make_response(
+            jsonify(PropertySchema().dump(Property.query.filter_by(id = property.id).first())),
+            200
+        )
+        
+api.add_resource(PropertyResource, '/properties')
 
-    prop.location = request.json.get('location', prop.location)
-    db.session.commit()
-    return jsonify({"message": "Property updated!"})
+class PropertyIdResource(Resource):
+    @jwt_required()
+    def get(self, id):
+        return make_response(
+            jsonify(PropertySchema().dump(Property.query.filter_by(id = id).first())),
+            200
+        )
+    
+    @jwt_required()
+    def patch(self, id):
+        property = Property.query.filter_by(id = id).first()
+        changes = request.json
 
-@app.route('/property/<int:property_id>', methods=['DELETE'])
-def delete_property(property_id):
-    prop = Property.query.get(property_id)
-    if not prop:
-        return jsonify({"error": "Property not found"}), 404
+        for key in changes:
+            setattr(property, key, changes[key])
 
-    db.session.delete(prop)
-    db.session.commit()
-    return jsonify({"message": "Property deleted!"})
+        db.session.add(property)
+        db.session.commit()
 
-@app.route('/property/<int:property_id>', methods=['GET'])
-def get_property_by_id(property_id):
-    prop = Property.query.get(property_id)
-    if not prop:
-        return jsonify({"error": "Property not found"}), 404
-    number_of_houses = len(prop.houses)  # Count the number of houses related to this property
-    return jsonify({
-        "id": prop.id,
-        "location": prop.location,
-        "property_name": prop.property_name,  # Include the property name in the response
-        "owner_id": prop.owner_id,
-        "number_of_houses": number_of_houses
-    })
+        return make_response(
+            jsonify(PropertySchema().dump(property)),
+            200
+        )
+        
+api.add_resource(PropertyIdResource, '/properties/<int:id>')
 
+class HousesResource(Resource):
+    @jwt_required()
+    def get(self):
+        claims = get_jwt()
+        owner_id = claims['id']
+        return make_response(
+            jsonify([HouseSchema().dump(house) for house in House.query.all() if house.property.owner.id == owner_id]),
+            200
+        )
+api.add_resource(HousesResource, '/houses')
 
+# get all houses for a property, add a house by a property
+class HousesByPropertyIdResource(Resource):
+    @jwt_required()
+    def get(self, property_id):
+        return make_response(
+            jsonify({'houses': [HouseSchema().dump(house) for house in House.query.filter_by(property_id = property_id)]}),
+            200
+        )
+    
+    @jwt_required()    
+    def post(self, property_id):
+        house = House(
+                unit = request.json.get("unit", None),
+                tenant_id = request.json.get("tenant", None),
+                property = Property.query.filter_by(id = property_id).first()
+            )
+        db.session.add(house)
+        db.session.commit()
+        
+        return make_response(
+            jsonify(HouseSchema().dump(house)),
+            200
+        )
+api.add_resource(HousesByPropertyIdResource, '/houses/<int:property_id>')
 
+# get, patch and delete house instance
+class HouseResource(Resource):
+    @jwt_required()
+    def get(self, house_id):
+        return make_response(
+            jsonify(HouseSchema().dump(House.query.filter_by(id = house_id).first())),
+            200
+        )
+    
+    @jwt_required()
+    def patch(self, house_id):
+        house = House.query.filter_by(id = house_id).first()
+        
+        changes = request.json
 
-# =================== Houses Routes ===================
+        for key in changes:
+            setattr(house, key, changes[key])
 
-@app.route('/houses', methods=['GET'])
-def get_all_houses():
-    houses = House.query.all()
-    return jsonify([{
-        "id": house.id,
-        "description": house.description,
-        "rent": house.rent,
-        "property_location": house.property.location
-    } for house in houses])
+        db.session.add(house)
+        db.session.commit()
 
-@app.route('/houses', methods=['POST'])
-def add_new_house():
-    description = request.json.get('description')
-    rent = request.json.get('rent')
-    property_id = request.json.get('property_id')
-    new_house = House(description=description, rent=rent, property_id=property_id)
-    db.session.add(new_house)
-    db.session.commit()
-    return jsonify({"message": "House added!", "id": new_house.id}), 201
+        return make_response(
+            jsonify(HouseSchema().dump(house)),
+            200
+        )
+        
+    @jwt_required()
+    def delete(self, house_id):
+        for house in House.query.filter_by(id = house_id).all():
+            
+            house.tenant_id = None
+            db.session.commit()
+            
+            db.session.delete(house)
+            db.session.commit()
+            
+        return make_response(
+            jsonify(HouseSchema().dump(House.query.filter_by(id = house_id).first())),
+            200
+        )
+        
+        
+api.add_resource(HouseResource, '/house/<int:house_id>')
 
-@app.route('/houses/<int:house_id>', methods=['PATCH'])
-def update_house(house_id):
-    house = House.query.get(house_id)
-    if not house:
-        return jsonify({"error": "House not found"}), 404
+class TenantResource(Resource):
+    @jwt_required()
+    def get(self):
+        return make_response(
+            jsonify([TenantSchema().dump(tenant) for tenant in Tenant.query.all()]),
+            200
+        )
+    
+    @jwt_required()
+    def post(self):
+        tenant = Tenant(
+            first_name = request.json.get("fname", None),
+            last_name = request.json.get("lname", None),
+            email = request.json.get("email", None)
+        )
+        db.session.add(tenant)
+        db.session.commit()
+        
+        return make_response(
+            jsonify(TenantSchema().dump(tenant))
+        )
+        
+api.add_resource(TenantResource, '/tenants')
 
-    house.description = request.json.get('description', house.description)
-    house.rent = request.json.get('rent', house.rent)
-    db.session.commit()
-    return jsonify({"message": "House updated!"})
+class TenantByIdResource(Resource):
+    @jwt_required()
+    def get(self, tenant_id):
+        return make_response(
+            jsonify(TenantSchema().dump(Tenant.query.filter_by(id = tenant_id).first())),
+            200
+        )
+    
+    @jwt_required()
+    def patch(self, tenant_id):
+        tenant = House.query.filter_by(id = tenant_id).first()
+        
+        changes = request.json
 
-# =================== Tenants Routes ===================
+        for key in changes:
+            setattr(tenant, key, changes[key])
 
-@app.route('/tenants/<int:tenant_id>', methods=['PATCH'])
-def update_tenant(tenant_id):
-    tenant = Tenant.query.get(tenant_id)
-    if not tenant:
-        return jsonify({"error": "Tenant not found"}), 404
+        db.session.add(tenant)
+        db.session.commit()
 
-    tenant.name = request.json.get('name', tenant.name)
-    tenant.email = request.json.get('email', tenant.email)
-    db.session.commit()
-    return jsonify({"message": "Tenant updated!"})
+        return make_response(
+            jsonify(TenantSchema().dump(tenant)),
+            200
+        )
+    
+    @jwt_required()
+    def delete(self, tenant_id):
+        for tenant in Tenant.query.filter_by(id=tenant_id).all():
+            db.session.delete(tenant)
+            db.session.commit()
+        
+        return make_response(
+            jsonify(TenantSchema().dump(Tenant.query.filter_by(id = tenant_id).first())),
+            200
+        )
+        
+api.add_resource(TenantByIdResource, '/tenant/<int:tenant_id>')
 
-@app.route('/tenants/<int:tenant_id>', methods=['DELETE'])
-def delete_tenant(tenant_id):
-    tenant = Tenant.query.get(tenant_id)
-    if not tenant:
-        return jsonify({"error": "Tenant not found"}), 404
+class HouseIssueResource(Resource):
+    @jwt_required()
+    def get(self):
+        claims = get_jwt()
+        owner_id = claims['id']
+        return make_response(
+            jsonify([HouseIssueSchema().dump(h_i) for h_i in HouseIssue.query.all() if h_i.house.property.owner.id == owner_id]),
+            200
+        )
+    
+    @jwt_required()
+    def post(self):
+        h_i = HouseIssue(
+            house_id = request.json.get("house_id", None),
+            issue_id = request.json.get("issue_id", None),
+            detail = request.json.get("detail", None),
+            status = 'not fixed'
+        )
+        db.session.add(h_i)
+        db.session.commit()
+        
+        return make_response(
+            jsonify(HouseIssueSchema().dump(h_i)),
+            200
+        )
+        
+api.add_resource(HouseIssueResource, '/issues')
 
-    # Remove tenant details from linked houses
-    linked_houses = House.query.filter_by(tenant_id=tenant_id).all()
-    for house in linked_houses:
-        house.tenant_id = None
+class HouseIssueIdResource(Resource):
+    @jwt_required()
+    def get(self, id):
+        return make_response(
+            jsonify(HouseIssueSchema().dump(HouseIssue.query.filter_by(id = id).first())),
+            200
+        )
+    
+    @jwt_required()
+    def delete(self, id):
+        h_i = HouseIssue.query.filter_by(id = id).first()
+        
+        db.session.delete(h_i)
+        db.session.commit()
+        
+        return make_response(
+            jsonify(HouseIssueSchema().dump(HouseIssue.query.filter_by(id = id).first())),
+            200
+        )
+    
+    @jwt_required
+    def patch(self, id):
+        h_i = HouseIssue.query.filter_by(id = id).first()
+        
+        changes = request.json
 
-    db.session.delete(tenant)
-    db.session.commit()
-    return jsonify({"message": "Tenant deleted!"})
+        for key in changes:
+            setattr(h_i, key, changes[key])
 
+        db.session.add(h_i)
+        db.session.commit()
 
-# =================== House Issues/Reports Routes ===================
-
-
-
-@app.route('/house_issues', methods=['GET'])
-def get_houses_with_issues():
-    house_issues = HouseIssue.query.all()
-    return jsonify([{
-        "house_id": issue.house_id,
-        "issue_id": issue.issue_id,
-        "issue_description": issue.issue.description,
-        "status": issue.status
-    } for issue in house_issues])
-
+        return make_response(
+            jsonify(HouseIssueSchema().dump(h_i)),
+            200
+        )
+        
+api.add_resource(HouseIssueIdResource, '/issues/<int:id>')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5559, debug=True)
