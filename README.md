@@ -20,7 +20,11 @@ To run the Rental Management App locally:
 - Start the development server using `npm start.`
 - Open your browser and navigate to `http://localhost:3000` or to the link with any other available port assigned when starting the server
 - The app should run on any modern web browser with JavaScript enabled
-- To start the flask app `cd` into `server`, run `pipenv install` then `flask run`
+- To start the flask app `cd` into `server`, run `pipenv install` then `flask run` or `python app.py` to test the API
+
+### API endpoints
+
+API documentation to be added after update
 
 # Dependencies
 The project has the following dependencies:
@@ -31,17 +35,10 @@ The project has the following dependencies:
 - Flask - For the API
 
 # Languages and Tools
-- HTML and CSS
 - JavaScript
-- React / JSX
-- React Router
-- React Bootstrap
-- React Auth Kit
-  
-- JSON
+- React (React Router, React Bootstrap, React Auth Kit)
 - Python
 - Flask
-- JWT Authentication
 
 # Contributing
 Contributions are welcome. Reach out to any of the authors or our community to get on board.
