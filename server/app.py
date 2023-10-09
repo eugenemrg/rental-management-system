@@ -244,8 +244,10 @@ api.add_resource(PropertyIdResource, '/properties/<int:id>')
 class HousesResource(Resource):
     @jwt_required()
     def get(self):
+        claims = get_jwt()
+        owner_id = claims['id']
         return make_response(
-            jsonify([HouseSchema().dump(house) for house in House.query.all()]),
+            jsonify([HouseSchema().dump(house) for house in House.query.all() if house.property.owner.id == owner_id]),
             200
         )
 api.add_resource(HousesResource, '/houses')
@@ -449,4 +451,4 @@ class HouseIssueIdResource(Resource):
 api.add_resource(HouseIssueIdResource, '/issues/<int:id>')
 
 if __name__ == '__main__':
-    app.run(port=5558, debug=True)
+    app.run(port=5559, debug=True)

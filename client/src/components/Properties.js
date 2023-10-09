@@ -5,9 +5,11 @@ import Navigation from './Navigation'
 import EditProperty from './EditProperty';
 import NewProperty from './NewProperty';
 import {useAuthHeader} from 'react-auth-kit'
+import { useNavigate } from 'react-router-dom';
 
 function Properties() {
   const authHeader = useAuthHeader()
+  const navigate =  useNavigate()
   let [properties, setProperties] = useState([])
 
   let options = {
@@ -19,7 +21,12 @@ function Properties() {
 
   useEffect(() => {
     fetch('http://127.0.0.1:5559/properties', options)
-      .then(res => res.json())
+      .then(res => {
+        if(!res.ok){
+          navigate('/login')
+        }
+        return res.json()
+      })
       .then((data) => {
         console.log(data)
         setProperties(data.properties)
