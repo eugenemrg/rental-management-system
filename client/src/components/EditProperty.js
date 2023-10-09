@@ -35,7 +35,7 @@ function EditProperty({property: {id, name, location}, updateProperty}) {
       body: JSON.stringify(updated_property)
     }
 
-    fetch(`http://127.0.0.1:5559/properties/${id}`, options)
+    fetch(`https://rmt-5zqu.onrender.com/properties/${id}`, options)
       .then(res => {
         if (!res.ok) {
           navigate('/login')
