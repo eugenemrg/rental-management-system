@@ -27,6 +27,41 @@ To run the Rental Management App locally:
 Website Link: https://rental-management-system-ten.vercel.app/
 Api Link: https://rmt-5zqu.onrender.com/
 
+# Screenshots
+
+Landing page and Log In page
+
+![](./screenshots/screenshot-1.png)
+![](./screenshots/Screenshot%20(199).png)
+
+Owner Dashboard
+
+![](./screenshots/Screenshot%20(200).png)
+
+Owner Properties
+
+![](./screenshots/Screenshot%20(201).png)
+
+Adding a new property
+
+![](./screenshots/Screenshot%20(202).png)
+
+Updating property details
+
+![](./screenshots/Screenshot%20(203).png)
+
+Units/houses in properties
+
+![](./screenshots/Screenshot%20(205).png)
+
+New house/unit
+
+![](./screenshots/Screenshot%20(206).png)
+
+House Issues
+
+![](./screenshots/Screenshot%20(208).png)
+
 ### API endpoints
 
 API documentation to be added after update
