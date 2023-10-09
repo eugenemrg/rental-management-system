@@ -58,7 +58,7 @@ This is a group project created by:
 
 - [Eugene Aduogo](https://github.com/eugenemrg/)
 - Misheck Wachiuri
-- Victor Oroo
+- [Victor Oroo](https://github.com/VictorOroo)
 - Genevive Opondo
 - Brian Odhiambo
 
